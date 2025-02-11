@@ -103,6 +103,38 @@ object CourseList {
         return null
     }
 
+    /**
+     * Check if the add/edit course operation is valid
+     * @param newCourse The course to be added/edited into the list
+     * @param oldCourse The course that [newCourse] is replacing using the edit function
+     * @return Nothing if successful, an error message otherwise
+     */
+    fun checkCourseValidity(newCourse: Course, oldCourse: Course?): String? {
+
+        if(newCourse.startTime.isAfter(newCourse.endTime))
+            return "The starting time is after the ending time"
+
+        val filteredCourseList = courseList.filter { course ->
+            course.dayOfWeek == newCourse.dayOfWeek }
+
+        for (course in filteredCourseList) {
+
+            // Skip over the course that newCourse is replacing
+            if (course == oldCourse) continue
+
+            if (newCourse.startTime.isAfter(course.startTime) and
+                newCourse.startTime.isBefore(course.endTime))
+                return "Starting time is in between a course's duration"
+
+            if (newCourse.endTime.isAfter(course.startTime) and
+                newCourse.endTime.isBefore(course.endTime))
+                return "Ending time is in between a course's duration"
+        }
+
+        // No problems detected, so nothing is returned
+        return null
+    }
+
     @Composable
     fun CourseList(padding: PaddingValues) {
         Column(

@@ -129,6 +129,10 @@ object CourseList {
             if (newCourse.endTime.isAfter(course.startTime) and
                 newCourse.endTime.isBefore(course.endTime))
                 return "Ending time is in between a course's duration"
+
+            if (newCourse.startTime.isBefore(course.startTime) and
+                newCourse.endTime.isAfter(course.endTime))
+                return "Complete overlap with another course"
         }
 
         // No problems detected, so nothing is returned

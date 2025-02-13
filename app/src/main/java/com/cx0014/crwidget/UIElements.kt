@@ -105,7 +105,8 @@ object UIElements {
                 title = "Add a course",
                 icon = Icons.Default.Add,
                 onDismissRequest = { dialogActive = false },
-                onConfirmation = { CourseList.addCourse(it) }
+                onConfirmation = { CourseList.addCourse(it) },
+                validityChecker = { CourseList.checkCourseValidity(it, null) }
             )
         }
     }
@@ -234,7 +235,8 @@ object UIElements {
         title: String,
         icon: ImageVector,
         onDismissRequest: () -> Unit,
-        onConfirmation: (Course) -> Unit
+        onConfirmation: (Course) -> Unit,
+        validityChecker: (Course) -> String?
     ) {
 
         var course by remember { mutableStateOf(defaultCourse) }
@@ -244,6 +246,7 @@ object UIElements {
         var endTimePickerActive by remember { mutableStateOf(false) }
         var dayOfWeekMenuExpanded by remember { mutableStateOf(false) }
         val dayOfWeekMenuScrollState = rememberScrollState()
+        var errorMessage by remember { mutableStateOf<String?>(null) }
 
         Dialog(onDismissRequest = { onDismissRequest() }) {
             Card(modifier = Modifier
@@ -337,6 +340,16 @@ object UIElements {
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
+                    // Display an error message if there is one
+                    errorMessage?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
@@ -348,7 +361,13 @@ object UIElements {
                         Spacer(modifier = Modifier.width(16.dp))
                         Button(
                             modifier = Modifier.weight(1f),
-                            onClick = { onConfirmation(course); onDismissRequest() }
+                            onClick = {
+                                errorMessage = validityChecker(course)
+                                if (errorMessage == null) {
+                                    onConfirmation(course)
+                                    onDismissRequest()
+                                }
+                            }
                         ) { Text("OK") }
                     }
                 }

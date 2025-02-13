@@ -170,7 +170,8 @@ object CourseList {
                             title = "Edit ${course.code}",
                             icon = Icons.Default.Edit,
                             onDismissRequest = { dialogActive = false },
-                            onConfirmation = { replaceCourse(course, it) }
+                            onConfirmation = { replaceCourse(course, it) },
+                            validityChecker = { checkCourseValidity(it, course) }
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))

@@ -1,13 +1,14 @@
+import com.android.build.api.dsl.ApplicationExtension
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.1.0"
 }
 
-android {
+configure<ApplicationExtension> {
     namespace = "com.cx0014.crwidget"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.cx0014.crwidget"
@@ -31,9 +32,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -73,4 +71,7 @@ dependencies {
 
     // Kotlin + coroutines
     implementation(libs.androidx.work.runtime.ktx)
+
+    // For Material Icons
+    implementation(libs.compose.material.icons)
 }

@@ -1,6 +1,6 @@
 # Course Reminder Widget
 
-![](https://img.shields.io/badge/Made%20with-Kotlin-purple?style=for-the-badge&logo=kotlin)
+![](https://img.shields.io/badge/Made%20with-Kotlin-%237F52FF?style=for-the-badge&logo=kotlin&logoColor=%237F52FF)
 
 ## About
 
